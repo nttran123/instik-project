@@ -1,89 +1,129 @@
 <template>
-    <div class="register container">
-        <form @submit.prevent="register" class="card-panel">
+    <div class="register">
+        <form @submit.prevent="handleSubmit" class="card-panel">
             <h2 class="center pink-text text-lighten-1">Register</h2>
-            <div class="field">
-                <label for="name">Name </label>
-                <input type="text" name="name" v-model="name">
-            </div>
-            <div class="field">
-                <label for="email">Email </label>
-                <input type="email" name="email" v-model="email">
-            </div>
-            <div class="field">
-                <label for="password">Password </label>
-                <input type="password" name="password" v-model="password">
-                
-            </div>
-            <div class="field">
-                <label for="repassword">Re-enter Password </label>
-                <input type="password" name="repassword" v-model="repassword">
-            </div>
-            <p v-if="errors.length">
-                 <b class="red-text">Please correct the following error(s):</b>
-                    <ul>
-                    <li class="red-text" v-for="(error,index) in errors" :key="index">{{ error }} </li>
-                    </ul>
-            </p>
-            <div class="field center">
-                <button class="btn pink lighten-1">Register</button>
-            </div>
-        </form>
+                            <div class="field">
+                                <label for="firstName">First Name</label>
+                                <input type="text" v-model="user.firstName" id="firstName" name="firstName" class="form-control" :class="{ 'is-invalid': submitted && $v.user.firstName.$error }" />
+                                <div v-if="submitted && !$v.user.firstName.required" class="invalid-feedback red-text">First Name is required</div>
+                            </div>
+                            <div class="field">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" v-model="user.lastName" id="lastName" name="lastName" class="form-control" :class="{ 'is-invalid': submitted && $v.user.lastName.$error }" />
+                                <div v-if="submitted && !$v.user.lastName.required" class="invalid-feedback red-text">Last Name is required</div>
+                            </div>
+                            <div class="field">
+                                <label for="email">Email</label>
+                                <input type="email" v-model="user.email" id="email" name="email" class="form-control" :class="{ 'is-invalid': submitted && $v.user.email.$error }" />
+                                <div v-if="submitted && $v.user.email.$error" class="invalid-feedback red-text">
+                                    <span v-if="!$v.user.email.required" >Email is required</span>
+                                    <span v-if="!$v.user.email.email">Email is invalid</span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="userName">User Name</label>
+                                <input type="text" v-model="user.userName" id="userName" name="userName" class="form-control" :class="{ 'is-invalid': submitted && $v.user.userName.$error }" />
+                                <div v-if="submitted && $v.user.userName.$error" class="invalid-feedback red-text">
+                                    <span v-if="!$v.user.userName.required">username is required</span>
+                                    <span v-if="!$v.user.userName.minLength">username must be at least 6 characters</span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="password">Password</label>
+                                <input type="password" v-model="user.password" id="password" name="password" class="form-control" :class="{ 'is-invalid': submitted && $v.user.password.$error }" />
+                                <div v-if="submitted && $v.user.password.$error" class="invalid-feedback red-text">
+                                    <span v-if="!$v.user.password.required">Password is required</span>
+                                    <span v-if="!$v.user.password.minLength">Password must be at least 6 characters</span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" v-model="user.confirmPassword" id="confirmPassword" name="confirmPassword" class="form-control" :class="{ 'is-invalid': submitted && $v.user.confirmPassword.$error }" />
+                                <div v-if="submitted && $v.user.confirmPassword.$error" class="invalid-feedback red-text">
+                                    <span v-if="!$v.user.confirmPassword.required">Confirm Password is required</span>
+                                    <span v-else-if="!$v.user.confirmPassword.sameAsPassword">Passwords must match</span>
+                                </div>
+                            </div>
+                            <div class="field center">
+                                <button class="btn pink lighten-1">Register</button>
+                            </div>
+            </form>
     </div>
 </template>
 
 <script>
-export default {
-    name: 'Register',
-    data(){
-        return {
-            name: null,
-            email: null,
-            password: null,
-            repassword: null,
-            errors: [],
-            passwordFieldType: 'password'
-        }
-    },
-    methods:{
-        register(){
-            this.errors = [];
+    import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
+    import slugify from 'slugify'
+    import db from '@/firebase/init'
+    import firebase from 'firebase'
 
-            if (!this.name) {
-            this.errors.push("Name required.");
-            }
-            else if (!this.validName(this.name)) {
-                this.errors.push('Name require at least 5 characters');
-            }
-            if (!this.email) {
-            this.errors.push('Email required.');
-            } 
-            if(!this.password){
-                this.errors.push('Password required.')
-            }
-            if(!this.repassword){
-                this.errors.push('Re-enter password required.')
-            }
-            else if (this.repassword != this.password) {
-            this.errors.push('Password and re-enter password must be the same.');
-            }
-            if (!this.errors.length) {
-            return true;
+    
+    export default {
+        name: "app",
+        data() {
+            return {
+                user: {
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    userName: "",
+                    password: "",
+                    confirmPassword: "",
+                    fullname: "",
+                    slug: null
+                },
+                submitted: false
+            };
+        },
+        validations: {
+            user: {
+                firstName: { required },
+                lastName: { required },
+                email: { required, email },
+                userName: { required,minLength: minLength(6)},
+                password: { required, minLength: minLength(6) },
+                confirmPassword: { required, sameAsPassword: sameAs('password') }
             }
         },
-        validName(name) {
-            if(this.name.length >= '5'){
-                return true;
+        methods: {
+            handleSubmit(e) {
+                this.submitted = true;
+                this.user.fullname = this.user.firstName + " " + this.user.lastName;
+                this.user.slug = slugify(this.user.userName, {
+                    replacement: '-',
+                    remove: /[$*_+~.()'"!\-:@]/g,
+                    lower: true
+                })
+                let ref = db.collection('users').doc(this.user.slug)
+                firebase.auth().createUserWithEmailAndPassword(this.user.email, this.user.confirmPassword)
+                .then(cred => {
+                    ref.set({
+                        fullname: this.user.fullname,
+                        user_id: cred.user.uid
+                    })
+                })
+                .then(() => {
+                    this.$router.push({ name: 'Home'})
+                })
+                .catch(err =>{
+                    console.log(err);
+                    alert(err)
+                })
+
+                console.log(this.user.slug)
+                // stop here if form is invalid
+                this.$v.$touch();
+                if (this.$v.$invalid) {
+                    return;
+                }
+
+                alert("SUCCESS!! :-)\n\n");
             }
-            else{
-                false
-            }
+        },
+        beforeCreate(){
+            document.body.className = "body-bg-image";
         }
-    },
-        beforeCreate() {
-        document.body.className = "body-bg-image";
-    }
-}
+    };
 </script>
 
 <style>
@@ -101,5 +141,9 @@ export default {
         color: #000;
         font-size: 16px;
     }
+    .invalid-feedback{
+        font-size: 13px;
+    }
+    
 
 </style>

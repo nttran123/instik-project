@@ -33,6 +33,12 @@ export default {
         return{
 
         }
+    },
+    methods: {
+
+    },
+    beforeCreate(){
+        document.body.className = "body-bg-no-image";
     }
 }
 </script>

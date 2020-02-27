@@ -3,7 +3,7 @@
         <div class="create-post">
             <p class="btn-small pink lighten-1 newPost ">
             <router-link :to="{ name: 'NewPost' }">
-                <span>New Post</span>
+                New Post
             </router-link>
             </p>
         </div>
@@ -48,6 +48,9 @@ export default {
                 },
             ]
         }
+    },
+    beforeCreate(){
+        document.body.className = "body-bg-no-image";
     }
 }
 </script>

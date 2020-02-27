@@ -3,13 +3,15 @@ import Router from 'vue-router'
 import Register from '@/components/auth/Register'
 import Login from '@/components/auth/Login'
 import Home from '@/components/home/Home'
-import UserProfile from '@/components/home/UserProfile'
+import UserProfile from '@/components/profile/UserProfile'
 import HomeUser from '@/components/home/HomeUser'
 import NewPost from '@/components/action/NewPost'
 
+import firebase from 'firebase'
+
 Vue.use(Router)
 
-export default new Router({
+const router =  new Router({
   routes: [
     {
       path: '/',
@@ -27,14 +29,20 @@ export default new Router({
       component: Login
     },
     {
-      path: '/profile',
+      path: '/profile/:id',
       name: 'UserProfile',
-      component: UserProfile
+      component: UserProfile,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/home',
       name: 'HomeUser',
-      component: HomeUser
+      component: HomeUser,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/new_post',
@@ -43,3 +51,24 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  //check to see if route requires Auth
+  if(to.matched.some(rec => rec.meta.requiresAuth)){
+    //check Auth state of user
+    let user = firebase.auth().currentUser
+    if(user){
+      //user signed in, process to route
+      next()
+    }
+    else{
+      //no user login, redirect to login
+      next({name: 'Login'})
+    }
+  }
+  else{
+    next()
+  }
+})
+
+export default router

@@ -8,8 +8,8 @@
             <img class="av" src="@/assets/avatar.jpg">
         </div>
 
-        <div class="profile_information">
-            <h2>Thanh Tran Ngoc</h2>
+        <div v-if="profile" class="profile_information">
+            <h2>{{profile.fullname}}</h2>
             <ul>
                 <li><a href="">Follower </a><span>80000</span></li>
                 <li><a href="">Following </a><span>100</span></li>
@@ -27,10 +27,13 @@
 </template>
 
 <script>
+import db from '@/firebase/init'
+
 export default {
     name: 'UserProfile',
     data(){
         return{
+            profile: null,
             images:[
                 {
                     id: 1,
@@ -115,6 +118,15 @@ export default {
 
             ]
         }
+    },
+    beforeCreate(){
+        document.body.className = "body-bg-no-image";
+    },
+    created(){
+        let ref = db.collection('users')
+        ref.doc(this.$route.params.id).get().then(user => {
+            this.profile =user.data()
+        })
     }
 }
 </script>
