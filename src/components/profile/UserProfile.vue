@@ -11,7 +11,7 @@
         <div v-if="profile" class="profile_information">
             <h2>{{profile.fullname}}</h2>
             <ul>
-                <li><a href="">Follower </a><span>80000</span></li>
+                <li><a href="">Follower </a><span>90000</span></li>
                 <li><a href="">Following </a><span>100</span></li>
             </ul>
             <div class="album">
