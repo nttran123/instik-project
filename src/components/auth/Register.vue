@@ -70,7 +70,8 @@
                     password: "",
                     confirmPassword: "",
                     fullname: "",
-                    slug: null
+                    slug: null,
+                    avatar: ""
                 },
                 submitted: false
             };
@@ -99,7 +100,8 @@
                 .then(cred => {
                     ref.set({
                         fullname: this.user.fullname,
-                        user_id: cred.user.uid
+                        user_id: cred.user.uid,
+                        avatar: 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png'
                     })
                 })
                 .then(() => {

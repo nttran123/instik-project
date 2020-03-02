@@ -6,6 +6,7 @@ import Home from '@/components/home/Home'
 import UserProfile from '@/components/profile/UserProfile'
 import HomeUser from '@/components/home/HomeUser'
 import NewPost from '@/components/action/NewPost'
+import EditUserProfile from '@/components/action/EditUserProfile'
 
 import firebase from 'firebase'
 
@@ -45,9 +46,14 @@ const router =  new Router({
       }
     },
     {
-      path: '/new_post',
+      path: '/new-post',
       name: 'NewPost',
       component: NewPost
+    },
+    {
+      path: '/edit-profile',
+      name: 'EditUserProfile',
+      component: EditUserProfile
     }
   ]
 })

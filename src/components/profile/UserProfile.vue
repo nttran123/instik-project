@@ -5,7 +5,7 @@
         </div>
 
         <div class="profile_img">
-            <img class="av" src="@/assets/avatar.jpg">
+            <img class="av" :src="profile.avatar">
         </div>
 
         <div v-if="profile" class="profile_information">
@@ -33,7 +33,7 @@ export default {
     name: 'UserProfile',
     data(){
         return{
-            profile: null,
+            profile: {},
             images:[
                 {
                     id: 1,
