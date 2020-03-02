@@ -1,5 +1,5 @@
 <template>
-    <div class="profile container">
+    <div v-if="profile" class="profile container">
         <div class="wallpaper">
             <img class="wp" src="@/assets/bg.jpg">
         </div>
@@ -33,7 +33,7 @@ export default {
     name: 'UserProfile',
     data(){
         return{
-            profile: {},
+            profile: null,
             images:[
                 {
                     id: 1,

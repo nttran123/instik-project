@@ -51,7 +51,7 @@ const router =  new Router({
       component: NewPost
     },
     {
-      path: '/edit-profile',
+      path: '/edit-profile/:id',
       name: 'EditUserProfile',
       component: EditUserProfile
     }

@@ -44,9 +44,6 @@
                                     <span v-else-if="!$v.user.confirmPassword.sameAsPassword">Passwords must match</span>
                                 </div>
                             </div>
-                            <div class="field center">
-                                <button class="btn pink lighten-1">Register</button>
-                            </div>
             </form>
     </div>
 </template>
@@ -102,6 +99,11 @@
                         fullname: this.user.fullname,
                         user_id: cred.user.uid,
                         avatar: 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png'
+                    }),
+                    postdb.set({
+                        user_id: cred.user.uid,
+                        title: null,
+                        post_image: null
                     })
                 })
                 .then(() => {
@@ -119,7 +121,7 @@
                     return;
                 }
 
-                alert("SUCCESS!! :-)\n\n");
+                alert("SUCCESS!! :-)");
             }
         },
         beforeCreate(){

@@ -1,11 +1,9 @@
 <template>
     <div class="home container">
         <div class="create-post">
-            <p class="btn-small pink lighten-1 newPost ">
-            <router-link :to="{ name: 'NewPost' }">
+            <router-link :to="{name: 'NewPost' }" class="btn-small pink lighten-1 newPost ">
                 New Post
             </router-link>
-            </p>
         </div>
 
         <div class="card"  v-for="image in images" :key="image.id">
