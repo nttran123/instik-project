@@ -10,6 +10,7 @@
                 <label for="changeAvatar">Change profile image</label>
                 <input type="file" @change="uploadImage" name="changeAvatar">
             </div>
+            <p class="red-text">Please wait until the image upload successfully! (3~5s)</p>
             <div class="btn-edit field center">
                 <button class="btn pink lighten-1">Edit</button>
             </div>
@@ -31,6 +32,7 @@ export default {
         }
     },
     methods: {
+        //catch URL of the selected image
         uploadImage(e){
             let file = e.target.files[0]
             //store image in a folder named: user_avatar in firestore
@@ -52,15 +54,28 @@ export default {
 
         },
         edit(){
-            //locate this user data location via user_id and update the information
-            db.collection('users').doc(this.user_info.id).update({
-                fullname: this.user_info.fullname, //name string
-                avatar: this.newAva //image link string
-            }).then(() => {
-                this.$router.push({name: 'UserProfile', params: this.user_info.id}) //redirect to the user profile page
-            }).catch(err => {
-                console.log(err)//catch error(s)
-            })
+            if(this.newAva){ //check if avatar selected or not
+                //locate this user data location via user_id and update the information
+                db.collection('users').doc(this.user_info.id).update({
+                    fullname: this.user_info.fullname, //name string
+                    avatar: this.newAva //image link string
+                }).then(() => {
+                    this.$router.push({name: 'UserProfile', params: this.user_info.id}) //redirect to the user profile page
+                }).catch(err => {
+                    console.log(err)//catch error(s)
+                })
+            }
+            else{
+                //locate this user data location via user_id and update the fullname only
+                db.collection('users').doc(this.user_info.id).update({
+                    fullname: this.user_info.fullname, //name string
+                }).then(() => {
+                    this.$router.push({name: 'UserProfile', params: this.user_info.id}) //redirect to the user profile page
+                }).catch(err => {
+                    console.log(err)//catch error(s)
+                })
+            }
+
         }
     },
     beforeCreate(){

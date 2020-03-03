@@ -6,75 +6,99 @@
             </router-link>
         </div>
 
-        <div class="card"  v-for="image in images" :key="image.id">
+        <div class="card"  v-for="post in posts" :key="post.id">
             <div class="card-image">
-                <img class="activator" :src="image.url">
+                <img class="activator" :src="post.image">
             </div>
                 <div class="card-content">
-                    <span class="card-title activator grey-text text-darken-4"><img class="av" src="@/assets/avatar.jpg">{{ image.title }}</span>
-                    <a class="btn pink lighten-1"><i class="material-icons">thumb_up</i></a>
+                    <span class="card-title activator grey-text text-darken-4 user-name"><img class="av" :src="post.ava">{{ post.userName }}</span>
+                    <span class="card-title activator grey-text text-darken-4 post-title">{{ post.title }}</span>
+                    <p class="grey-text text-darken-4">{{post.timestamp}}</p>
+                    <a class="btn pink lighten-1" @click="likePost"><i class="material-icons">thumb_up</i>{{ post.like }}</a>
                 </div>
         </div>
     </div>
 </template>
 
 <script>
+import db from '@/firebase/init'
+import firebase from 'firebase'
+import moment from 'moment'
+
 export default {
     name: 'HomeUser',
     data(){
         return {
-            images:[
-                {
-                    id: 1,
-                    url: require('@/assets/bg.jpg'),
-                    title: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis, repellendus.'
-                },
-                 {
-                    id: 2,
-                    url: require('@/assets/avatar.jpg'),
-                    title: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis, repellendus.'
-                },
-                {
-                    id: 3,
-                    url: require('@/assets/img1.jpg'),
-                    title: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis, repellendus.'
-                },
-                {
-                    id: 4,
-                    url: require('@/assets/img2.jpg'),
-                    title: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis, repellendus.'
-                },
-            ]
+            user_id: null,
+            posts:  [],
+            user_info: []
+        }
+    },
+    methods: {
+        likePost(){
+
         }
     },
     beforeCreate(){
         document.body.className = "body-bg-no-image";
+    },
+    created(){
+                //get all data from posts collection
+                let postdb = db.collection('posts').orderBy('timestamp', "desc")
+                postdb.onSnapshot(snapshot => {
+                    snapshot.docChanges().forEach(change =>{
+                        if(change.type == 'added'){
+                            let post = change.doc
+                            let ref = db.collection('users').where('user_id', '==', post.data().user_id)
+                                ref.get().then(snapshot => {
+                                    snapshot.forEach(doc =>{
+                                        this.posts.push({
+                                            id: post.id,
+                                            image: post.data().image,
+                                            like: post.data().like,
+                                            timestamp: moment(post.data().timestamp).format('lll'),
+                                            title: post.data().title,
+                                            user_id: post.data().user_id,
+                                            ava: doc.data().avatar,
+                                            userName: doc.data().fullname
+                                        }) //push the data to the posts array
+                                        console.log(this.posts)
+                                    })
+                                })
+                        }
+                        
+                    })
+                })
+                
     }
+
+
+    
 }
 </script>
 
 <style>
 
     .container{
-        max-width: 50%;
-        height: auto;
         background-color: white;
-        margin-top: 1em;
-        position: relative;
         box-shadow:0px 0px 20px grey;
+        height: auto;
+        margin-top: 1em;
+        max-width: 50%;
+        position: relative;
     }
     .card{
         margin-top: 0.5em;
         margin-bottom: 0.5em;
     }
     .av{
-        display: block;
-        border-radius: 50%;
-        width: 4em;
-        height: 4em;
         border: 5px solid rgb(218, 218, 218);
+        border-radius: 50%;
+        display: block;
         float: left;
         margin-right: 1em;
+        height: 4em;
+        width: 4em;
     }
     span{
         color: white;
@@ -82,6 +106,13 @@ export default {
     .newPost{
         display: block;
         margin: 2em auto;
+    }
+    .user-name{
+        font-weight: bold !important;
+        font-size: 2em !important;
+    }
+    .post-title{
+        font-size: 1.5em !important;
     }
 
 </style>

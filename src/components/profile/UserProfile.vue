@@ -13,20 +13,23 @@
             <ul>
                 <li><a href="">Follower </a><span>90000</span></li>
                 <li><a href="">Following </a><span>100</span></li>
+                <li><router-link :to="{ name: 'EditUserProfile', params: {id: this.profile.id}}">Edit Information</router-link></li>
             </ul>
-            <div class="album">
-                <div class="card" v-for="image in images" :key="image.id">
+            <div class="album" v-if="posts">
+                <div class="card" v-for="post in posts" :key="post.id">
                     <div class="card-content">
-                        <img class="ab" :src="image.url">
+                        <img class="ab" :src="post.image">
                     </div>
                 </div>
 
             </div>
+
         </div>
     </div>
 </template>
 
 <script>
+import firebase from 'firebase'
 import db from '@/firebase/init'
 
 export default {
@@ -34,98 +37,37 @@ export default {
     data(){
         return{
             profile: null,
-            images:[
-                {
-                    id: 1,
-                    url: require('@/assets/bg.jpg')
-                },
-                {
-                    id: 2,
-                    url: require('@/assets/homebg.jpg')
-                },
-                {
-                    id: 3,
-                    url: require('@/assets/avatar.jpg')
-                },
-                {
-                    id: 4,
-                    url: require('@/assets/img1.jpg')
-                },
-                {
-                    id: 5,
-                    url: require('@/assets/img2.jpg')
-                },
-                {
-                    id: 6,
-                    url: require('@/assets/img3.jpg')
-                },
-                {
-                    id: 7,
-                    url: require('@/assets/img4.jpg')
-                },
-                {
-                    id: 8,
-                    url: require('@/assets/img5.jpg')
-                },
-                {
-                    id: 9,
-                    url: require('@/assets/img6.jpg')
-                },
-                {
-                    id: 10,
-                    url: require('@/assets/img7.jpg')
-                },
-                {
-                    id: 11,
-                    url: require('@/assets/img8.jpg')
-                },
-                {
-                    id: 12,
-                    url: require('@/assets/img9.jpg')
-                },
-                {
-                    id: 13,
-                    url: require('@/assets/img10.jpg')
-                },
-                {
-                    id: 14,
-                    url: require('@/assets/img11.jpg')
-                },
-                {
-                    id: 15,
-                    url: require('@/assets/img12.jpg')
-                },
-                {
-                    id: 16,
-                    url: require('@/assets/img13.jpg')
-                },
-                {
-                    id: 17,
-                    url: require('@/assets/img14.jpg')
-                },
-                {
-                    id: 18,
-                    url: require('@/assets/img15.jpg')
-                },
-                {
-                    id: 19,
-                    url: require('@/assets/img16.jpg')
-                },
-                {
-                    id: 20,
-                    url: require('@/assets/img17.jpg')
-                }
-
-            ]
+            user_id: null,
+            posts:  []
         }
     },
     beforeCreate(){
         document.body.className = "body-bg-no-image";
     },
     created(){
+        //get the user slug from users collection
         let ref = db.collection('users')
         ref.doc(this.$route.params.id).get().then(user => {
             this.profile =user.data()
+            this.profile.id = user.id   //set id of this profile to id of the user in users collection
+        })
+        firebase.auth().onAuthStateChanged((user) =>{ //check the current status of the user
+            if(user){
+                this.user_id = user.uid; //get the account uid
+                let postdb = db.collection('posts').where('user_id', '==', this.user_id)//using account uid to find user own post and get post data
+                postdb.get().then(snapshot => {
+                    snapshot.forEach(doc =>{
+                        let post = doc.data()
+                        post.id = doc.id
+                        this.posts.push(post)
+                        console.log(this.posts)
+                    })
+                })
+                
+            }
+            else{
+                this.user = null
+            }
         })
     }
 }
@@ -133,9 +75,10 @@ export default {
 
 <style>
     .container{
-        width: 50%;
-        position: relative;
         box-shadow:0px 0px 20px grey;
+        position: relative;
+        width: 50%;
+        
     }
     .wp{
         display: block;
@@ -143,13 +86,13 @@ export default {
         height: 300px;
     }
     .av{
-        position: absolute;
-        display: block;
+        border: 5px solid rgb(218, 218, 218);
         border-radius: 50%;
+        display: block;
         width: 13em;
         height: 13em;
-        border: 5px solid rgb(218, 218, 218);
-        margin: -115px 0 auto 1em;
+        position: absolute;
+        margin: -115px 0 auto 1em;  
     }
     .profile_information{
         background-color: white;
@@ -157,10 +100,10 @@ export default {
         margin-bottom: 40px;
     }
     h2{
-        margin:0 0 0 6.5em;
+        color: rgb(39, 21, 21);
         font-size: 2.5em;
         font-weight: 600;
-        color: rgb(39, 21, 21);
+        margin:0 0 0 6.5em;
         text-shadow:-2px   -2px #F3F3F3,
                                  -2px -1.5px #F3F3F3,
                                  -2px   -1px #F3F3F3,

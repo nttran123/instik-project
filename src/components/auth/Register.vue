@@ -44,6 +44,9 @@
                                     <span v-else-if="!$v.user.confirmPassword.sameAsPassword">Passwords must match</span>
                                 </div>
                             </div>
+                            <div class="field center">
+                                <button class="btn pink lighten-1">Register</button>
+                            </div>
             </form>
     </div>
 </template>
@@ -98,16 +101,11 @@
                     ref.set({
                         fullname: this.user.fullname,
                         user_id: cred.user.uid,
-                        avatar: 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png'
-                    }),
-                    postdb.set({
-                        user_id: cred.user.uid,
-                        title: null,
-                        post_image: null
+                        avatar: 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png' //set the defaul avatar for the new user
                     })
                 })
                 .then(() => {
-                    this.$router.push({ name: 'Home'})
+                    this.$router.push({ name: 'Home'}) //after register, redirect to the home page
                 })
                 .catch(err =>{
                     console.log(err);

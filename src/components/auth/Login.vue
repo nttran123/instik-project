@@ -31,10 +31,12 @@ export default {
     },
     methods:{
         login(){
+            //validation
             if(this.email && this.password){
                 this.feedback = null
+                //sign in to the web using firebase method
                 firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(cred =>{
-                this.$router.push({ name: 'HomeUser'})
+                this.$router.push({ name: 'HomeUser'}) //after login, direct to home user page
                 }).catch(err => {
                     alert(err)
                 })
