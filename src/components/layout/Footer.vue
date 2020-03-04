@@ -17,12 +17,12 @@ export default {
 
 <style>
     .footer {
+        background-color: #ec407a;
+        bottom: 0;
+        color: white;
         position: fixed;
         left: 0;
-        bottom: 0;
         width: 100%;
-        background-color: #ec407a;
-        color: white;
         text-align: center;
 }
 

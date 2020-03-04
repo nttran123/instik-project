@@ -5,11 +5,11 @@
         </div>
 
         <div class="profile_img">
-            <img class="av" :src="profile.avatar">
+            <img class="profile-ava" :src="profile.avatar">
         </div>
 
         <div v-if="profile" class="profile_information">
-            <h2>{{profile.fullname}}</h2>
+            <h2 class="profile-name">{{profile.fullname}}</h2>
             <ul>
                 <li><a href="">Follower </a><span>90000</span></li>
                 <li><a href="">Following </a><span>100</span></li>
@@ -74,7 +74,7 @@ export default {
 </script>
 
 <style>
-    .container{
+    .profile{
         box-shadow:0px 0px 20px grey;
         position: relative;
         width: 50%;
@@ -85,7 +85,7 @@ export default {
         width: 100%;
         height: 300px;
     }
-    .av{
+    .profile-ava{
         border: 5px solid rgb(218, 218, 218);
         border-radius: 50%;
         display: block;
@@ -99,7 +99,7 @@ export default {
         height: auto;
         margin-bottom: 40px;
     }
-    h2{
+    .profile-name{
         color: rgb(39, 21, 21);
         font-size: 2.5em;
         font-weight: 600;

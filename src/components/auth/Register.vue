@@ -96,12 +96,17 @@
                     lower: true
                 })
                 let ref = db.collection('users').doc(this.user.slug)
+                let fol = db.collection('followers').doc(this.user.slug)
                 firebase.auth().createUserWithEmailAndPassword(this.user.email, this.user.confirmPassword)
                 .then(cred => {
                     ref.set({
                         fullname: this.user.fullname,
                         user_id: cred.user.uid,
                         avatar: 'https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png' //set the defaul avatar for the new user
+                    })
+                    fol.set({
+                        user_id: cred.user.uid,
+                        followers: null
                     })
                 })
                 .then(() => {

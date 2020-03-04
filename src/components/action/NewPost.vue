@@ -1,9 +1,8 @@
 <template>
     <div class="new-post container">
         <div class="pink lighten-1">
-            <h2 class="center white-text">New Post</h2>
+            <h2 class="center white-text new-post-title">New Post</h2>
         </div>
-        <div class="row">
             <form @submit.prevent="sendPost">
                 <div class="row">
                     <div class="input-field col s12">
@@ -13,13 +12,13 @@
                     <div class="field choose-image">
                         <input type="file" @change="uploadImage">
                     </div>
+                    <p class="red-text">Please wait until the image upload successfully! (3~5s)</p>
                     <p v-if="feedback" class="red-text">{{ this.feedback }}</p>
                     <div class="field center">
                         <button class="btn pink lighten-1">Send</button>
                     </div>
                 </div>
             </form>
-        </div>
     </div>
 </template>
 
@@ -67,7 +66,7 @@ export default {
                     image: this.newPost.image,
                     timestamp: Date.now(),
                     user_id: this.newPost.user_id,
-                    like: 0
+                    like: 0,
                 }).then(() => {
                     this.$router.push({name: 'HomeUser'}) //redirect to the user home page
                 }).catch(err => {
@@ -97,15 +96,15 @@ export default {
 </script>
 
 <style>
-    .container{
-        height: auto;
+    .new-post{
+        background-color: white;
     }
-    h2{
+    .new-post-title{
         margin-top: 1em;
         font-size: 3em;
     }
     .row{
-        height: 50px;
+        height: 170px;
     }
     .up-image{
         width: 40%;
