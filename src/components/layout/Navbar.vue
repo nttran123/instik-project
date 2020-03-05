@@ -6,7 +6,7 @@
                 <ul class="right">
                     <li v-if="!user"><router-link :to="{ name: 'Register'}"><span>Register</span></router-link></li>
                     <li v-if="!user"><router-link :to="{ name: 'Login'}"><span>Login</span></router-link></li>
-                    <li v-if="user_info"><router-link :to="{ name: 'UserProfile', params: {id: this.user_info.id}}"><span>{{ user_info.fullname }}</span></router-link></li>
+                    <li v-if="user"><router-link :to="{ name: 'UserProfile', params: {id: this.user_info.id}}"><span>{{ user_info.fullname }}</span></router-link></li>
                     <li v-if="user"><a @click="logOut">Logout</a></li>
                 </ul>
             </div>

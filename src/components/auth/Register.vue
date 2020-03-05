@@ -110,7 +110,7 @@
                     })
                 })
                 .then(() => {
-                    this.$router.push({ name: 'Home'}) //after register, redirect to the home page
+                    this.$router.push({ name: 'HomeUser'}) //after register, redirect to the user home page
                 })
                 .catch(err =>{
                     console.log(err);

@@ -12,7 +12,7 @@
                     <div class="field choose-image">
                         <input type="file" @change="uploadImage">
                     </div>
-                    <p class="red-text">Please wait until the image upload successfully! (3~5s)</p>
+                    <p class="red-text noti">Please wait until the image upload successfully! (3~5s)</p>
                     <p v-if="feedback" class="red-text">{{ this.feedback }}</p>
                     <div class="field center">
                         <button class="btn pink lighten-1">Send</button>
@@ -104,17 +104,17 @@ export default {
         font-size: 3em;
     }
     .row{
-        height: 170px;
+        height: 15em;
     }
     .up-image{
         width: 40%;
         margin-left: 1em;
         margin-bottom: 1em;
     }
-    .post{
-        margin: 1em;
-    }
     .choose-image{
         margin-left: 1em;
+    }
+    .noti{
+        text-align: center;
     }
 </style>

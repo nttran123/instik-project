@@ -43,8 +43,6 @@ export default {
     },
     beforeCreate(){
         document.body.className = "body-bg-no-image";
-    },
-    created(){
         //get the user slug from users collection
         let ref = db.collection('users')
         ref.doc(this.$route.params.id).get().then(user => {
@@ -69,6 +67,9 @@ export default {
                 this.user = null
             }
         })
+    },
+    created(){
+        
     }
 }
 </script>
