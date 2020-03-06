@@ -48,12 +48,18 @@ const router =  new Router({
     {
       path: '/new-post',
       name: 'NewPost',
-      component: NewPost
+      component: NewPost,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/edit-profile/:id',
       name: 'EditUserProfile',
-      component: EditUserProfile
+      component: EditUserProfile,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })
@@ -62,15 +68,16 @@ router.beforeEach((to, from, next) => {
   //check to see if route requires Auth
   if(to.matched.some(rec => rec.meta.requiresAuth)){
     //check Auth state of user
-    let user = firebase.auth().currentUser
-    if(user){
-      //user signed in, process to route
-      next()
-    }
-    else{
-      //no user login, redirect to login
-      next({name: 'Login'})
-    }
+    firebase.auth().onAuthStateChanged(user => {
+        if(user){
+          //user signed in, process to route
+          next()
+        }
+        else{
+          //no user login, redirect to login
+          next({name: 'Login'})
+        }
+    })
   }
   else{
     next()

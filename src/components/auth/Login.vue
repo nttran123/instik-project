@@ -1,18 +1,34 @@
 <template>
     <div class="login container">
-        <form @submit.prevent="login" class="card-panel" method="POST">
-            <h2 class="center pink-text text-lighten-1">Login</h2>
+        <form 
+            @submit.prevent="login" 
+            class="card-panel">
+
+            <h2 class="center pink-text text-lighten-1">
+                Login
+            </h2>
             <div class="field">
-                <label for="email">Email</label>
-                <input type="text" name="email" v-model="email">
+                <label for="email">
+                    Email
+                </label>
+                <input type="text" name="email" 
+                    v-model="email">
             </div>
             <div class="field">
-                <label for="password">Password</label>
-                <input type="password" name="password" v-model="password">
+                <label for="password">
+                    Password
+                </label>
+                <input type="password" name="password" 
+                    v-model="password">
             </div>
-            <p class="red-text center" v-if="feedback">{{ feedback }}</p>
+            <p class="red-text center" 
+                v-if="feedback">
+                {{ feedback }}
+            </p>
             <div class="field center">
-                <button class="btn pink lighten-1">login</button>
+                <button class="btn pink lighten-1">
+                    login
+                </button>
             </div>
         </form>
     </div>
@@ -35,20 +51,24 @@ export default {
             if(this.email && this.password){
                 this.feedback = null
                 //sign in to the web using firebase method
-                firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(cred =>{
+                firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(cred =>
+                {
                 this.$router.push({ name: 'HomeUser'}) //after login, direct to home user page
                 }).catch(err => {
                     alert(err)
                 })
             }
             else{
-                if(!this.email && this.password){
+                if(!this.email && this.password)
+                {
                     this.feedback = "Please enter your Email"
                 }
-                else if(this.email && !this.password){
+                else if(this.email && !this.password)
+                {
                     this.feedback = "Please enter your Password"
                 }
-                else{
+                else
+                {
                     this.feedback = "Please enter your Email and password"
                 }
             }

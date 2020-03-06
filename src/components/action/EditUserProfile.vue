@@ -1,18 +1,34 @@
 <template>
-    <div v-if="user_info" class="edit-profile container">
-        <form @submit.prevent="edit" class="card-panel">
-            <h2 class="center pink-text text-lighten-1">Edit Profile</h2>
+    <div class="edit-profile container"
+          v-if="user_info">
+
+        <form @submit.prevent="edit" 
+            class="card-panel">
+            <h2 class="center pink-text text-lighten-1">
+                Edit Profile
+            </h2>
             <div class="field">
-                <label for="editName">New name</label>
-                <input type="text" name="editName" v-model="user_info.fullname">
+                <label for="editName">
+                    New name
+                </label>
+                <input type="text" name="editName" 
+                    v-model="user_info.fullname">
             </div>
             <div class="changeAvatar field">
-                <label for="changeAvatar">Change profile image</label>
-                <input type="file" @change="uploadImage" name="changeAvatar">
+                <label for="changeAvatar">
+                    Change profile image
+                </label>
+                <input type="file" 
+                    @change="uploadImage" 
+                    name="changeAvatar">
             </div>
-            <p class="red-text">Please wait until the image upload successfully! (3~5s)</p>
+            <p class="red-text">
+                Please wait until the image upload successfully! (3~5s)
+            </p>
             <div class="btn-edit field center">
-                <button class="btn pink lighten-1">Edit</button>
+                <button class="btn pink lighten-1">
+                    Edit
+                </button>
             </div>
         </form>
     </div>
@@ -40,32 +56,42 @@ export default {
 
             let uploadTask =  storageRef.put(file)
 
-            uploadTask.on('state_changed', (snapshot) => {
+            uploadTask.on('state_changed', (snapshot) => 
+                {
 
-            }, (error) => {
+                }, (error) => 
+                {
 
-            }, () => {
-                //get the image link and set it to newAva
-                uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                    this.newAva = downloadURL
-                    alert("Update image successfully")
-                })
-            })
+                }, () => 
+                {
+                    //get the image link and set it to newAva
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => 
+                    {
+                        this.newAva = downloadURL
+                        alert("Update image successfully")
+                    })
+                }
+            )
 
         },
         edit(){
-            if(this.newAva){ //check if avatar selected or not
+            if(this.newAva)
+            { //check if avatar selected or not
                 //locate this user data location via user_id and update the information
-                db.collection('users').doc(this.user_info.id).update({
+                db.collection('users').doc(this.user_info.id).update(
+                {
                     fullname: this.user_info.fullname, //name string
                     avatar: this.newAva //image link string
-                }).then(() => {
+                }).then(() => 
+                {
                     this.$router.push({name: 'UserProfile', params: this.user_info.id}) //redirect to the user profile page
-                }).catch(err => {
+                }).catch(err => 
+                {
                     console.log(err)//catch error(s)
                 })
             }
-            else{
+            else
+            {
                 //locate this user data location via user_id and update the fullname only
                 db.collection('users').doc(this.user_info.id).update({
                     fullname: this.user_info.fullname, //name string
@@ -83,19 +109,26 @@ export default {
     },
     created(){
         //get all data of this user from firebase before rendering the page
-        firebase.auth().onAuthStateChanged((user) =>{
-            if(user){
+        firebase.auth().onAuthStateChanged((user) =>
+        {
+            if(user)
+            {
                 this.user = user;
                 let ref = db.collection('users').where('user_id', '==', this.user.uid)
-                ref.get().then(snapshot => {
-                    snapshot.forEach(doc =>{
-                        this.user_info = doc.data() //get all data of this user and put all into user_info
-                        this.user_info.id = doc.id 
-                    })
+                ref.get().then(snapshot => 
+                {
+                    if(snapshot){
+                        snapshot.forEach(doc =>
+                        {
+                            this.user_info = doc.data() //get all data of this user and put all into user_info
+                            this.user_info.id = doc.id 
+                        })
+                    }
                 })
                 
             }
-            else{
+            else
+            {
                 this.user = null
             }
         })

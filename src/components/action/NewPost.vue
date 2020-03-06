@@ -1,21 +1,35 @@
 <template>
     <div class="new-post container">
         <div class="pink lighten-1">
-            <h2 class="center white-text new-post-title">New Post</h2>
+            <h2 class="center white-text new-post-title">
+                New Post
+            </h2>
         </div>
             <form @submit.prevent="sendPost">
                 <div class="row">
                     <div class="input-field col s12">
-                    <textarea id="textarea1" class="materialize-textarea" v-model="newPost.title"></textarea>
-                    <label for="textarea1" class='active'>Title</label>
+                    <textarea id="textarea1" 
+                        class="materialize-textarea" 
+                        v-model="newPost.title">
+                    </textarea>
+                    <label for="textarea1" class='active'>
+                        Title
+                    </label>
                     </div>
                     <div class="field choose-image">
                         <input type="file" @change="uploadImage">
                     </div>
-                    <p class="red-text noti">Please wait until the image upload successfully! (3~5s)</p>
-                    <p v-if="feedback" class="red-text">{{ this.feedback }}</p>
+                    <p class="red-text noti">
+                        Please wait until the image upload successfully! (3~5s)
+                    </p>
+                    <p class="red-text"
+                        v-if="feedback">
+                        {{ this.feedback }}
+                    </p>
                     <div class="field center">
-                        <button class="btn pink lighten-1">Send</button>
+                        <button class="btn pink lighten-1">
+                            Send
+                        </button>
                     </div>
                 </div>
             </form>
@@ -47,10 +61,10 @@ export default {
             let uploadTask =  storageRef.put(file)
 
             uploadTask.on('state_changed', (snapshot) => {
-
             }, (error) => {
 
-            }, () => {
+            }, () => 
+            {
                 //get the image link and set it to newAva
                 uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                     this.newPost.image = downloadURL
@@ -60,20 +74,24 @@ export default {
 
         },
         sendPost(){
-            if(this.newPost.title){
+            if(this.newPost.title)
+            {
                 db.collection('posts').add({
                     title: this.newPost.title,
                     image: this.newPost.image,
                     timestamp: Date.now(),
                     user_id: this.newPost.user_id,
                     like: 0,
-                }).then(() => {
+                }).then(() => 
+                {
                     this.$router.push({name: 'HomeUser'}) //redirect to the user home page
-                }).catch(err => {
+                }).catch(err => 
+                {
                     console.log(err)//catch error(s)
                 })
             }
-            else{
+            else
+            {
                 this.feedback = "Please enter the post title"
             }
         }
@@ -82,11 +100,14 @@ export default {
         document.body.className = "body-bg-no-image";
     },
     created(){
-        firebase.auth().onAuthStateChanged((user) =>{
-            if(user){
+        firebase.auth().onAuthStateChanged((user) =>
+        {
+            if(user)
+            {
                 this.newPost.user_id = user.uid;                
             }
-            else{
+            else
+            {
                 this.newPost.user_id = null
             }
         })

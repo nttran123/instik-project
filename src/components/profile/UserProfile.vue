@@ -1,24 +1,38 @@
 <template>
-    <div v-if="profile" class="profile container">
+    <div class="profile container"
+        v-if="profile">
+
         <div class="wallpaper">
             <img class="wp" src="@/assets/bg.jpg">
         </div>
 
         <div class="profile_img">
-            <img class="profile-ava" :src="profile.avatar">
+            <img class="profile-ava" 
+                :src="profile.avatar">
         </div>
 
-        <div v-if="profile" class="profile_information">
-            <h2 class="profile-name">{{profile.fullname}}</h2>
+        <div class="profile_information"
+            v-if="profile">
+            <h2 class="profile-name">
+                {{profile.fullname}}
+            </h2>
             <ul>
                 <li><a href="">Follower </a><span>90000</span></li>
                 <li><a href="">Following </a><span>100</span></li>
-                <li><router-link :to="{ name: 'EditUserProfile', params: {id: this.profile.id}}">Edit Information</router-link></li>
+                <li><router-link 
+                    :to="{ name: 'EditUserProfile', params: {id: this.profile.id}}">
+                    Edit Information
+                </router-link>
+                </li>
             </ul>
-            <div class="album" v-if="posts">
-                <div class="card" v-for="post in posts" :key="post.id">
+            <div class="album" 
+                v-if="posts">
+                <div class="card" 
+                    v-for="post in posts" 
+                    :key="post.id">
                     <div class="card-content">
-                        <img class="ab" :src="post.image">
+                        <img class="ab" 
+                            :src="post.image">
                     </div>
                 </div>
 
@@ -45,25 +59,32 @@ export default {
         document.body.className = "body-bg-no-image";
         //get the user slug from users collection
         let ref = db.collection('users')
-        ref.doc(this.$route.params.id).get().then(user => {
+        ref.doc(this.$route.params.id).get().then(user => 
+        {
             this.profile =user.data()
             this.profile.id = user.id   //set id of this profile to id of the user in users collection
         })
-        firebase.auth().onAuthStateChanged((user) =>{ //check the current status of the user
+        firebase.auth().onAuthStateChanged((user) =>
+        { //check the current status of the user
             if(user){
                 this.user_id = user.uid; //get the account uid
                 let postdb = db.collection('posts').where('user_id', '==', this.user_id)//using account uid to find user own post and get post data
-                postdb.get().then(snapshot => {
-                    snapshot.forEach(doc =>{
-                        let post = doc.data()
-                        post.id = doc.id
-                        this.posts.push(post)
-                        console.log(this.posts)
-                    })
+                postdb.get().then(snapshot => 
+                {
+                    if(snapshot){
+                    snapshot.forEach(doc =>
+                        {
+                            let post = doc.data()
+                            post.id = doc.id
+                            this.posts.push(post)
+                            console.log(this.posts)
+                        })
+                    }
                 })
                 
             }
-            else{
+            else
+            {
                 this.user = null
             }
         })

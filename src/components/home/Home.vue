@@ -1,7 +1,17 @@
 <template>
     <div class="home container">
-        <h2 class="center-align light-blue-text text-accent-2">Ins<span class="pink-text text-lighten-1">tik</span></h2>
-        <p class="center-align pink-text text-lighten-1 content">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla officia a quasi suscipit dicta eum laboriosam inventore, nam ab. Sint quod quas, nobis pariatur eaque aliquid repellat, repudiandae similique laudantium ipsa sed perspiciatis</p>
+        <h2 class="center-align light-blue-text text-accent-2">
+            Ins
+            <span class="pink-text text-lighten-1">
+                tik
+            </span>
+        </h2>
+        <p class="center-align pink-text text-lighten-1 content">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
+            Nulla officia a quasi suscipit dicta eum laboriosam inventore, 
+            nam ab. Sint quod quas, nobis pariatur eaque aliquid repellat, 
+            repudiandae similique laudantium ipsa sed perspiciatis
+        </p>
         <p class="btn-large pink lighten-1 bt">
             <router-link :to="{ name: 'Register' }">
                 <span>START NOW</span>
