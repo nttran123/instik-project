@@ -6,9 +6,16 @@ import router from './router'
 import Vuelidate from 'vuelidate'
 import 'materialize-css'
 import 'materialize-css/dist/css/materialize.min.css'
+import Cookies from 'js-cookie'
+import Element from 'element-ui'
 
 Vue.config.productionTip = false;
 Vue.use(Vuelidate)
+
+Vue.use(Element, {
+  size: Cookies.get('size') || 'medium' ,
+  i18n: (key, value) => i18n.t(key, value), // set element-ui default size
+})
 
 /* eslint-disable no-new */
 new Vue({
