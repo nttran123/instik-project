@@ -105,6 +105,7 @@ export default {
         }
     },
     mounted() {
+        //focus 
         if (this.loginForm.username === '') {
             this.$refs.username.focus()
         } else if (this.loginForm.password === '') {
