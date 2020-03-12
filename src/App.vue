@@ -1,10 +1,11 @@
 <template>
   <div id="app">
     <Navbar />
-    <router-view/>
+    <router-view/>  
     <Footer />
   </div>
 </template>
+
 
 <script>
 import Navbar from '@/components/layout/Navbar'
@@ -43,9 +44,4 @@ export default {
     center fixed;
   background-size: 100% 100%;
 }
-.bg-side-menu{
-     background-image: url("./assets/bg-sidenav.jpg"); 
-     background-size: cover;
-     background-repeat: no-repeat;
-  }
 </style>

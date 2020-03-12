@@ -3,7 +3,7 @@
         v-if="profile">
 
         <div class="wallpaper">
-            <img class="user-wallpaper" src="@/assets/bg.jpg">
+            <img class="wp" src="@/assets/bg.jpg">
         </div>
 
         <div class="profile_img">
@@ -130,7 +130,7 @@ export default {
         width: 50%;
         
     }
-    .user-wallpaper{
+    .wp{
         display: block;
         width: 100%;
         height: 300px;
@@ -187,12 +187,12 @@ export default {
                                  -1px   -2px #F3F3F3,
                                -1.5px   -2px #F3F3F3;
     }
-   .profile ul{
+    .profile ul{
         margin-top: 2px;
         margin-left: 17em;
 
     }
-    .profile ul li {
+    ul li {
         display: inline-block;
         margin-right: 5em;
         margin-top:0.5em;
